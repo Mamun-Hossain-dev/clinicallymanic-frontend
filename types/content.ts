@@ -30,17 +30,20 @@ export interface MediaItem {
 }
 
 export interface ApiContentItem {
-  _id: string
+  id: string
   category: CategoryType
-  contentType: ContentType
+  type: 'ARTICLE' | 'YOUTUBE' | 'SPOTIFY'
   title: string
   description?: string
-  thumbnail: string
-  media: MediaItem[]
-  createdBy: string
+  thumbnailUrl?: string | null
+  body?: string | null
+  videoUrl?: string | null
+  audioUrl?: string | null
+  createdBy?: {
+    id: string
+  } | null
   createdAt: string
   updatedAt: string
-  __v: number
 }
 
 export interface ApiResponse<T> {
@@ -99,54 +102,36 @@ export function extractYouTubeVideoId(url: string): string | null {
 // Normalize API response to frontend format
 export function normalizeContentItem(apiItem: ApiContentItem): ContentItem {
   const normalized: ContentItem = {
-    _id: apiItem._id,
+    _id: apiItem.id,
     category: apiItem.category,
-    contentType: apiItem.contentType,
+    contentType:
+      apiItem.type === 'ARTICLE'
+        ? 'article'
+        : apiItem.type === 'YOUTUBE'
+          ? 'youtube'
+          : 'spotify',
     title: apiItem.title,
     description: apiItem.description,
-    thumbnail: apiItem.thumbnail,
+    thumbnail: apiItem.thumbnailUrl || '',
     createdAt: apiItem.createdAt,
   }
 
-  // Process media array
-  if (apiItem.media && apiItem.media.length > 0) {
-    const media = apiItem.media[0]
-
-    // Handle article content type
-    if (media.type === 'article') {
-      if (typeof media.data === 'object' && 'description' in media.data) {
-        normalized.body = media.data.description
-        normalized.contentType = 'article'
+  if (apiItem.type === 'ARTICLE') {
+    normalized.body = apiItem.body || apiItem.description
+  } else if (apiItem.type === 'YOUTUBE' && apiItem.videoUrl) {
+    const videoId = extractYouTubeVideoId(apiItem.videoUrl)
+    if (videoId) {
+      normalized.youtube = {
+        videoId,
+        videoUrl: apiItem.videoUrl,
+        description: apiItem.description,
       }
     }
-
-    // Handle YouTube content type
-    else if (media.type === 'youtube') {
-      if (typeof media.data === 'object' && 'videourl' in media.data) {
-        const videoId = extractYouTubeVideoId(media.data.videourl || '')
-        if (videoId) {
-          normalized.youtube = {
-            videoId,
-            videoUrl: media.data.videourl || '',
-            description: media.data.description,
-          }
-          normalized.contentType = 'youtube'
-          normalized.description = media.data.description
-        }
-      }
-    }
-
-    // Handle Spotify content type
-    else if (media.type === 'spotify') {
-      if (typeof media.data === 'object') {
-        normalized.spotify = {
-          url: media.data.previewurl || media.data.url || '',
-          previewurl: media.data.previewurl,
-          description: media.data.description,
-        }
-        normalized.contentType = 'spotify'
-        normalized.description = media.data.description
-      }
+  } else if (apiItem.type === 'SPOTIFY' && apiItem.audioUrl) {
+    normalized.spotify = {
+      url: apiItem.audioUrl,
+      previewurl: apiItem.audioUrl,
+      description: apiItem.description,
     }
   }
 

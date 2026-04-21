@@ -21,6 +21,7 @@ export interface UserProfile {
   lastName?: string
   email: string
   bio?: string
+  phone?: string
   phoneNumber?: string
   profileImage?: string
   subscription?: Subscription
@@ -56,13 +57,35 @@ export const useUserStore = create<UserState>()(
     (set, get) => ({
       user: null,
 
-      setUser: user => set({ user }),
+      setUser: user =>
+        set({
+          user: user
+            ? {
+                ...user,
+                phone: user.phone || user.phoneNumber,
+                phoneNumber: user.phoneNumber || user.phone,
+              }
+            : null,
+        }),
 
       clearUser: () => set({ user: null }),
 
       updateUser: updates =>
         set(state => ({
-          user: state.user ? { ...state.user, ...updates } : null,
+          user: state.user
+            ? {
+                ...state.user,
+                ...updates,
+                phone:
+                  ('phone' in updates ? updates.phone : undefined) ||
+                  ('phoneNumber' in updates ? updates.phoneNumber : undefined) ||
+                  state.user.phone,
+                phoneNumber:
+                  ('phoneNumber' in updates ? updates.phoneNumber : undefined) ||
+                  ('phone' in updates ? updates.phone : undefined) ||
+                  state.user.phoneNumber,
+              }
+            : null,
         })),
 
       // Check if user has active subscription

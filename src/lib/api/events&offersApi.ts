@@ -8,6 +8,7 @@ export interface Event {
   _id: string
   title: string
   description: string
+  thumbnail?: string
   location: string
   status: 'upcoming' | 'ongoing' | 'completed'
   date: string
@@ -46,6 +47,64 @@ export interface Offer {
   __v: number
 }
 
+type BackendEvent = {
+  id: string
+  title: string
+  description: string
+  location: string
+  status: 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'
+  date: string
+  thumbnailUrl?: string | null
+  createdBy?: {
+    id: string
+    email: string
+  } | null
+  createdAt: string
+  updatedAt: string
+}
+
+type BackendOffer = {
+  id: string
+  title: string
+  description: string
+  discount: number
+  validUntil: string
+  status: 'ACTIVE' | 'INACTIVE'
+  thumbnailUrl?: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+const normalizeEvent = (event: BackendEvent): Event => ({
+  _id: event.id,
+  title: event.title,
+  description: event.description,
+  location: event.location,
+  status: event.status.toLowerCase() as Event['status'],
+  date: event.date,
+  thumbnail: event.thumbnailUrl || '',
+  createdBy: {
+    _id: event.createdBy?.id || '',
+    email: event.createdBy?.email || '',
+  },
+  createdAt: event.createdAt,
+  updatedAt: event.updatedAt,
+  __v: 0,
+})
+
+const normalizeOffer = (offer: BackendOffer): Offer => ({
+  _id: offer.id,
+  thumbnail: offer.thumbnailUrl || '',
+  title: offer.title,
+  description: offer.description,
+  discount: offer.discount,
+  validUntil: offer.validUntil,
+  status: offer.status.toLowerCase() as Offer['status'],
+  createdAt: offer.createdAt,
+  updatedAt: offer.updatedAt,
+  __v: 0,
+})
+
 export interface OffersResponse {
   statusCode: number
   success: boolean
@@ -69,12 +128,18 @@ export const useGetEvents = ({ page = 1, limit = 10 }: UseGetEventsParams) => {
     queryKey: ['events', page, limit],
     queryFn: async () => {
       const response = await fetch(
-        `${API_BASE_URL}/event?page=${page}&limit=${limit}`,
+        `${API_BASE_URL}/events?page=${page}&limit=${limit}`,
       )
       if (!response.ok) {
         throw new Error('Failed to fetch events')
       }
-      return response.json()
+      const result = (await response.json()) as EventsResponse & {
+        data: BackendEvent[]
+      }
+      return {
+        ...result,
+        data: result.data.map(normalizeEvent),
+      }
     },
     placeholderData: keepPreviousData,
   })
@@ -91,11 +156,15 @@ export const useGetEventById = (id: string | null) => {
     queryKey: ['event', id],
     queryFn: async () => {
       if (!id) throw new Error('Event ID is required')
-      const response = await fetch(`${API_BASE_URL}/event/${id}`)
+      const response = await fetch(`${API_BASE_URL}/events/${id}`)
       if (!response.ok) {
         throw new Error('Failed to fetch event')
       }
-      return response.json()
+      const result = await response.json()
+      return {
+        ...result,
+        data: normalizeEvent(result.data as BackendEvent),
+      }
     },
     enabled: !!id,
   })
@@ -112,12 +181,18 @@ export const useGetOffers = ({ page = 1, limit = 10 }: UseGetOffersParams) => {
     queryKey: ['offers', page, limit],
     queryFn: async () => {
       const response = await fetch(
-        `${API_BASE_URL}/offer?page=${page}&limit=${limit}`,
+        `${API_BASE_URL}/offers?page=${page}&limit=${limit}`,
       )
       if (!response.ok) {
         throw new Error('Failed to fetch offers')
       }
-      return response.json()
+      const result = (await response.json()) as OffersResponse & {
+        data: BackendOffer[]
+      }
+      return {
+        ...result,
+        data: result.data.map(normalizeOffer),
+      }
     },
     placeholderData: keepPreviousData,
   })
@@ -134,11 +209,15 @@ export const useGetOfferById = (id: string | null) => {
     queryKey: ['offer', id],
     queryFn: async () => {
       if (!id) throw new Error('Offer ID is required')
-      const response = await fetch(`${API_BASE_URL}/offer/${id}`)
+      const response = await fetch(`${API_BASE_URL}/offers/${id}`)
       if (!response.ok) {
         throw new Error('Failed to fetch offer')
       }
-      return response.json()
+      const result = await response.json()
+      return {
+        ...result,
+        data: normalizeOffer(result.data as BackendOffer),
+      }
     },
     enabled: !!id,
   })

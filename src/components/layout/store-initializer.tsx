@@ -8,7 +8,7 @@ import { useUserStore } from '@/app/store/useUserProfileStore'
 export function StoreInitializer() {
   const { data: session } = useSession()
   const accessToken = session?.user?.accessToken || ''
-  const { data: profileData } = useGetUserProfile(accessToken)
+  const { data: profileData } = useGetUserProfile(accessToken, session?.user?.id)
   const { setUser } = useUserStore()
 
   useEffect(() => {

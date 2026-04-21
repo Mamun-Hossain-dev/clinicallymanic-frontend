@@ -9,7 +9,7 @@ import {
   ContentType,
 } from '@/../types/content'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1'
 
 // Generic fetch helper
 async function fetchAPI<T>(url: string, options?: RequestInit): Promise<T> {
@@ -47,7 +47,7 @@ export async function getContents(params?: {
   if (params?.sortBy) queryParams.append('sortBy', params.sortBy)
   if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder)
 
-  const url = `${API_BASE}/content?${queryParams.toString()}`
+  const url = `${API_BASE}/contents?${queryParams.toString()}`
 
   const response = await fetchAPI<ApiResponse<ApiContentItem>>(url)
   const normalizedData = response.data.map(normalizeContentItem)
@@ -60,7 +60,7 @@ export async function getContents(params?: {
 
 // GET SINGLE CONTENT
 export async function getContentById(id: string): Promise<ContentItem> {
-  const url = `${API_BASE}/content/${id}`
+  const url = `${API_BASE}/contents/${id}`
   const response = await fetchAPI<{ data: ApiContentItem }>(url)
   return normalizeContentItem(response.data)
 }
@@ -127,7 +127,7 @@ export async function searchContents(
   const queryParams = new URLSearchParams()
   queryParams.append('searchTerm', searchTerm)
 
-  const url = `${API_BASE}/content?${queryParams.toString()}`
+  const url = `${API_BASE}/contents?${queryParams.toString()}`
   const response = await fetchAPI<ApiResponse<ApiContentItem>>(url)
 
   return response.data.map(normalizeContentItem)

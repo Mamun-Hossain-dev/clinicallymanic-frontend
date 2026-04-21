@@ -20,6 +20,40 @@ export interface Shop {
   categories?: string[]
 }
 
+type BackendShop = {
+  id: string
+  name: string
+  title: string
+  description: string
+  imageUrls: string[]
+  sizes: string[]
+  price: number | string
+  type: string
+  status: string
+  details?: string | null
+  createdById?: string
+  createdAt: string
+  updatedAt: string
+  categories?: string[]
+}
+
+const normalizeShop = (shop: BackendShop): Shop => ({
+  _id: shop.id,
+  name: shop.name,
+  title: shop.title,
+  description: shop.description,
+  images: shop.imageUrls || [],
+  size: shop.sizes || [],
+  price: Number(shop.price),
+  type: shop.type.toLowerCase(),
+  status: shop.status.toLowerCase() as Shop['status'],
+  details: shop.details || '',
+  createdBy: shop.createdById || '',
+  createdAt: shop.createdAt,
+  updatedAt: shop.updatedAt,
+  categories: shop.categories?.map(category => category.toLowerCase()) || [],
+})
+
 export interface ShopResponse {
   statusCode: number
   success: boolean
@@ -97,17 +131,29 @@ export const useGetAllShops = (params: UseGetAllShopsParams) => {
       if (limit) queryParams.append('limit', limit.toString())
       if (searchTerm) queryParams.append('searchTerm', searchTerm)
       // if (type) queryParams.append('type', type)
-      if (categories) queryParams.append('categories', categories)
+      if (categories) queryParams.append('category', categories)
+      if (type && type !== 'all') {
+        queryParams.append(
+          'type',
+          type.toLowerCase() === 'exclusive' ? 'EXCLUSIVE' : 'STANDARD',
+        )
+      }
       if (sortBy) queryParams.append('sortBy', sortBy)
       if (sortOrder) queryParams.append('sortOrder', sortOrder)
 
       const response = await fetch(
-        `${API_BASE_URL}/shop?${queryParams.toString()}`,
+        `${API_BASE_URL}/shop/products?${queryParams.toString()}`,
       )
       if (!response.ok) {
         throw new Error('Failed to fetch shops')
       }
-      return response.json()
+      const result = (await response.json()) as ShopResponse & {
+        data: BackendShop[]
+      }
+      return {
+        ...result,
+        data: result.data.map(normalizeShop),
+      }
     },
     placeholderData: keepPreviousData,
   })
@@ -119,11 +165,15 @@ export const useGetShopById = (id: string | null) => {
     queryKey: ['shop', id],
     queryFn: async () => {
       if (!id) throw new Error('Shop ID is required')
-      const response = await fetch(`${API_BASE_URL}/shop/${id}`)
+      const response = await fetch(`${API_BASE_URL}/shop/products/${id}`)
       if (!response.ok) {
         throw new Error('Failed to fetch shop')
       }
-      return response.json()
+      const result = await response.json()
+      return {
+        ...result,
+        data: normalizeShop(result.data as BackendShop),
+      }
     },
     enabled: !!id,
   })
@@ -141,13 +191,19 @@ export const useShopPayment = (accessToken?: string) => {
         throw new Error('Unauthorized')
       }
 
-      const response = await fetch(`${API_BASE_URL}/shop/pay/${shopId}`, {
+      const response = await fetch(`${API_BASE_URL}/shop/products/${shopId}/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          customerName: data.name,
+          customerPhone: data.phone,
+          customerEmail: data.email,
+          deliveryLocation: data.location,
+          size: data.size,
+        }),
       })
 
       if (!response.ok) {
