@@ -20,7 +20,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const router = useRouter()
 
   const accessToken = session?.user?.accessToken || ''
-  const { data: profileData } = useGetUserProfile(accessToken)
+  const { data: profileData } = useGetUserProfile(accessToken, session?.user?.id)
 
   // Get cart and wishlist counts
   const { getCartCount, wishlist } = useShopStore()

@@ -9,10 +9,10 @@ const API_URL =
 export interface Subscription {
   _id: string
   name: string
-  type: 'monthly' | 'yearly'
+  type: 'weekly' | 'monthly' | 'yearly'
   price: number
   status: 'active' | 'inactive'
-  features: string
+  features: string[]
   totalSubscribedUsers: string[]
   createdAt: string
   updatedAt: string
@@ -40,6 +40,27 @@ export interface PaymentResponse {
   }
 }
 
+type CheckoutPayload = {
+  subscriptionId: string
+  token: string
+  successUrl?: string
+  cancelUrl?: string
+}
+
+type BackendPlan = {
+  id: string
+  name: string
+  interval: 'WEEKLY' | 'MONTHLY' | 'YEARLY'
+  price: number | string
+  isActive: boolean
+  features: string[]
+  _count?: {
+    subscriptions?: number
+  }
+  createdAt: string
+  updatedAt: string
+}
+
 // =====================
 // Get all subscriptions
 // =====================
@@ -47,7 +68,7 @@ export const useGetSubscriptions = () => {
   return useQuery<SubscriptionsResponse>({
     queryKey: ['subscriptions'],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/subscription`, {
+      const res = await fetch(`${API_URL}/subscriptions/plans`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +80,24 @@ export const useGetSubscriptions = () => {
         throw new Error('Failed to fetch subscriptions')
       }
 
-      return res.json()
+      const result = await res.json()
+      return {
+        ...result,
+        data: (result.data as BackendPlan[]).map(plan => ({
+          _id: plan.id,
+          name: plan.name,
+          type: plan.interval.toLowerCase(),
+          price: Number(plan.price),
+          status: plan.isActive ? 'active' : 'inactive',
+          features: Array.isArray(plan.features) ? plan.features : [],
+          totalSubscribedUsers: Array.from(
+            { length: plan._count?.subscriptions ?? 0 },
+            () => '',
+          ),
+          createdAt: plan.createdAt,
+          updatedAt: plan.updatedAt,
+        })),
+      } as SubscriptionsResponse
     },
   })
 }
@@ -72,16 +110,20 @@ export const usePaySubscription = () => {
     mutationFn: async ({
       subscriptionId,
       token,
-    }: {
-      subscriptionId: string
-      token: string
-    }) => {
-      const res = await fetch(`${API_URL}/subscription/pay/${subscriptionId}`, {
+      successUrl,
+      cancelUrl,
+    }: CheckoutPayload) => {
+      const res = await fetch(`${API_URL}/subscriptions/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({
+          planId: subscriptionId,
+          successUrl,
+          cancelUrl,
+        }),
       })
 
       if (!res.ok) {

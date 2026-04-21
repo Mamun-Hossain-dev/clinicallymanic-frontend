@@ -18,7 +18,7 @@ export default function ClinicallyManicFooter() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (payload: { email: string }) => {
-      const res = await fetch(`${API_URL}/newsletter`, {
+      const res = await fetch(`${API_URL}/newsletters`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

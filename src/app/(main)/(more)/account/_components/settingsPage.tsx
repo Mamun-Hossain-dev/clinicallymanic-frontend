@@ -20,6 +20,7 @@ import { ProfileForm } from './profileFrom'
 export default function SettingsPage() {
   const { data: session, update: updateSession } = useSession()
   const accessToken = session?.user?.accessToken || ''
+  const userId = session?.user?.id
 
   // Zustand store
   const { setUser } = useUserStore()
@@ -46,10 +47,10 @@ export default function SettingsPage() {
     data: profileData,
     isLoading: profileLoading,
     refetch: refetchProfile,
-  } = useGetUserProfile(accessToken)
+  } = useGetUserProfile(accessToken, userId)
 
   const { mutate: updateProfile, isPending: isUpdatingProfile } =
-    useUpdateProfile(accessToken, {
+    useUpdateProfile(accessToken, userId, {
       onSuccess: async () => {
         toast.success('Profile updated successfully ✅')
         await refetchProfile()
@@ -60,7 +61,7 @@ export default function SettingsPage() {
     })
 
   const { mutate: updateProfileImage, isPending: isUpdatingImage } =
-    useUpdateProfileImage(accessToken, {
+    useUpdateProfileImage(accessToken, userId, {
       onSuccess: async () => {
         toast.success('Profile image updated successfully ✅')
         setImageFile(null)
@@ -96,7 +97,7 @@ export default function SettingsPage() {
       setLastName(profile?.lastName || '')
       setUsername(userName || '')
       setEmail(profile.email || '')
-      setPhoneNumber(profile.phoneNumber || '')
+      setPhoneNumber(profile.phoneNumber || profile.phone || '')
       setProfileImage(profile.profileImage || '')
       setImagePreview(profile.profileImage || '')
     }
@@ -153,7 +154,7 @@ export default function SettingsPage() {
         setFirstName(profile.firstName || '')
         setLastName(profile.lastName || '')
         setUsername(userName || '')
-        setPhoneNumber(profile.phoneNumber || '')
+        setPhoneNumber(profile.phoneNumber || profile.phone || '')
         setImagePreview(profile.profileImage || '')
         setImageFile(null)
       }

@@ -42,6 +42,8 @@ export default function PlansPage() {
       const result = await payMutation.mutateAsync({
         subscriptionId,
         token: session.user.accessToken,
+        successUrl: `${window.location.origin}/plans-success`,
+        cancelUrl: `${window.location.origin}/plans-cancel`,
       })
 
       if (result.success && result.data?.url) {

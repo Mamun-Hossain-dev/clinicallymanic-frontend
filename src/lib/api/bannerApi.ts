@@ -6,7 +6,7 @@ export interface Banner {
   description: string
   image: string
   type: string
-  status: string
+  status: 'active' | 'inactive'
   createdBy: string
   createdAt: string
   updatedAt: string
@@ -24,11 +24,35 @@ export interface BannerResponse {
   data: Banner[]
 }
 
+type BackendBanner = {
+  id: string
+  title: string
+  description: string
+  bannerImageUrl?: string | null
+  category: string
+  status: 'ACTIVE' | 'INACTIVE'
+  createdById: string
+  createdAt: string
+  updatedAt: string
+}
+
+const normalizeBanner = (banner: BackendBanner): Banner => ({
+  _id: banner.id,
+  title: banner.title,
+  description: banner.description,
+  image: banner.bannerImageUrl || '',
+  type: banner.category,
+  status: banner.status.toLowerCase() as 'active' | 'inactive',
+  createdBy: banner.createdById,
+  createdAt: banner.createdAt,
+  updatedAt: banner.updatedAt,
+})
+
 // Fetch all banners or filter by type
 export const fetchBanners = async (type?: string): Promise<BannerResponse> => {
   const url = type
-    ? `${API_URL}/banner?type=${encodeURIComponent(type)}`
-    : `${API_URL}/banner`
+    ? `${API_URL}/banners?category=${encodeURIComponent(type)}`
+    : `${API_URL}/banners`
 
   const res = await fetch(url, {
     method: 'GET',
@@ -43,5 +67,16 @@ export const fetchBanners = async (type?: string): Promise<BannerResponse> => {
     throw new Error(`Failed to fetch banners: ${res.status}`)
   }
 
-  return res.json()
+  const response = (await res.json()) as {
+    statusCode: number
+    success: boolean
+    message: string
+    meta: BannerResponse['meta']
+    data: BackendBanner[]
+  }
+
+  return {
+    ...response,
+    data: response.data.map(normalizeBanner),
+  }
 }

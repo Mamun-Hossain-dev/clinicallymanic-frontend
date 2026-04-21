@@ -1,7 +1,7 @@
 'use client'
 import { useUserStore } from '@/app/store/useUserProfileStore'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -17,13 +17,13 @@ export default function ExclusiveLayout({
   const [isStoreLoaded, setIsStoreLoaded] = useState(false)
 
   // Unified access check helper
-  const hasAccess = () => {
+  const hasAccess = useCallback(() => {
     if (!user) return false
     if (user.role === 'admin') return true
     if (isExclusivePlan()) return true
     if (isBasicPlan() && !isSubscriptionExpired()) return true
     return false
-  }
+  }, [user, isExclusivePlan, isBasicPlan, isSubscriptionExpired])
 
   useEffect(() => {
     // Wait for store to be populated if authenticated
@@ -56,7 +56,7 @@ export default function ExclusiveLayout({
         router.push('/plans')
       }
     }
-  }, [status, router, user, isExclusivePlan, isBasicPlan, isSubscriptionExpired, isStoreLoaded])
+  }, [status, router, user, isBasicPlan, isExclusivePlan, isSubscriptionExpired, isStoreLoaded, hasAccess])
 
   if (status === 'loading' || (status === 'authenticated' && !isStoreLoaded)) {
     return (
