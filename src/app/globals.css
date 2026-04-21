@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ===== Luxury Dark Theme ===== */
+  --bg-start: #000000;
+  --bg-end: #1a1a1a;
+
+  --foreground: #f5f5f5;
+  --muted-foreground: #a1a1aa;
+
+  --card-bg: #0f0f0f;
+  --border-color: #262626;
+
+  --primary: #000000;
+  --secondary: #fbfcfb; /* Spotify Green */
+  --accent: #f8f8f8; /* YouTube Red */
+  --background: #f8fafc;
+  --card: #ffffff;
+}
+
+/* Full site background */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  color: var(--foreground);
+  font-family: var(--font-alice);
+}
+
+/* Reusable utility classes */
+.bg-site {
+  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+}
+
+.bg-card {
+  background-color: var(--card-bg);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.border-muted {
+  border-color: var(--border-color);
+}
+
+.bg-zoom {
+  animation: bgZoom 10s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+/* Custom Scrollbar - Black / Gray & Transparent */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2f2f2f 0%, #6b6b6b 100%);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1f1f1f 0%, #4b4b4b 100%);
+}
+
+/* Firefox Support */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4b4b4b transparent;
+}
+
+/* Horizontal Scrollbar Variant */
+.custom-scrollbar-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+.custom-scrollbar-horizontal::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 0 8px;
+}
+
+.custom-scrollbar-horizontal::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #2f2f2f 0%, #6b6b6b 100%);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #1f1f1f 0%, #4b4b4b 100%);
+}
+
+/* Dark Variant (Pure Dark Gray) */
+.custom-scrollbar-dark::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: #2a2a2a;
+}
+
+.custom-scrollbar-dark {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a transparent;
+}
