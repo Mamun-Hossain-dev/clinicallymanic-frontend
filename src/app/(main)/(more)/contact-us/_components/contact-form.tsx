@@ -90,9 +90,7 @@ const ContactForm = () => {
   const onSubmit = async (values: FormData) => {
     try {
       await mutateAsync(values)
-    } catch (error) {
-      console.log('error from contact: ', error)
-    }
+    } catch {}
   }
 
   return (

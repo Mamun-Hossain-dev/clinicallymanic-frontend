@@ -33,8 +33,6 @@ export default function HeroCarousel() {
 
   const { user } = useUserStore()
 
-  console.log('user from store', user)
-
   // Fetch banners from API
   useEffect(() => {
     const loadBanners = async () => {
@@ -115,7 +113,7 @@ export default function HeroCarousel() {
                       : 'opacity-0 translate-x-full'
                   }`}
               >
-                <Link href={bannerRoute} className="block h-full w-full">
+                <div className="block h-full w-full">
                   <Image
                     src={banner.image}
                     alt={banner.title}
@@ -155,14 +153,17 @@ export default function HeroCarousel() {
 
                       {/* Explore Button - Glassy */}
                       <div className="mt-6 animate-fade-in-up animation-delay-450 hidden md:block">
-                        <span className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md text-white font-semibold rounded-lg border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all shadow-lg">
+                        <Link
+                          href={bannerRoute}
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md text-white font-semibold rounded-lg border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all shadow-lg"
+                        >
                           Explore Now
                           <ExternalLink className="w-4 h-4" />
-                        </span>
+                        </Link>
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               </div>
             )
           })}
@@ -203,12 +204,10 @@ export default function HeroCarousel() {
       {/* ===== Thumbnails with hover animation (smaller width) ===== */}
       <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8 justify-center items-center">
         {banners.map((banner, idx) => {
-          const bannerRoute = getBannerRoute(banner.type)
-
           return (
-            <Link
+            <button
               key={banner._id}
-              href={bannerRoute}
+              type="button"
               onClick={() => goToSlide(idx)}
               className={`relative aspect-[12/5] cursor-pointer overflow-hidden rounded-lg transition-all duration-300 ${idx === currentSlide
                   ? 'ring-2 ring-white scale-105'
@@ -233,7 +232,7 @@ export default function HeroCarousel() {
                   {banner.type}
                 </p>
               </div>
-            </Link>
+            </button>
           )
         })}
       </div>

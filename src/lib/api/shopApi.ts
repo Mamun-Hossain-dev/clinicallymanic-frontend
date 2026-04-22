@@ -103,6 +103,16 @@ interface UseGetAllShopsParams {
   sortOrder?: string
 }
 
+const normalizeShopTypeParam = (type?: string) => {
+  if (!type) return undefined
+
+  const normalized = type.trim().toLowerCase()
+  if (normalized === 'exclusive') return 'EXCLUSIVE'
+  if (normalized === 'standard') return 'STANDARD'
+
+  return undefined
+}
+
 export const useGetAllShops = (params: UseGetAllShopsParams) => {
   const {
     page = 1,
@@ -130,13 +140,10 @@ export const useGetAllShops = (params: UseGetAllShopsParams) => {
       if (page) queryParams.append('page', page.toString())
       if (limit) queryParams.append('limit', limit.toString())
       if (searchTerm) queryParams.append('searchTerm', searchTerm)
-      // if (type) queryParams.append('type', type)
       if (categories) queryParams.append('category', categories)
-      if (type && type !== 'all') {
-        queryParams.append(
-          'type',
-          type.toLowerCase() === 'exclusive' ? 'EXCLUSIVE' : 'STANDARD',
-        )
+      const normalizedType = normalizeShopTypeParam(type)
+      if (normalizedType) {
+        queryParams.append('type', normalizedType)
       }
       if (sortBy) queryParams.append('sortBy', sortBy)
       if (sortOrder) queryParams.append('sortOrder', sortOrder)

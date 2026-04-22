@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import {
   Home,
   ListMusic,
@@ -17,13 +16,9 @@ import {
   Flame,
   Heart,
   ShoppingCart,
-  // Crown,
-  Lock,
 } from 'lucide-react'
 import { FiCalendar, FiTag } from 'react-icons/fi'
 import { useState } from 'react'
-import { useUserStore } from '@/app/store/useUserProfileStore'
-import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
 const menuItems = [
@@ -47,19 +42,16 @@ const exclusiveItems = [
     icon: Flame,
     label: 'Exclusive Store',
     href: '/exclusive-store',
-    requiresExclusive: true,
   },
   {
     icon: FiCalendar,
     label: 'Events',
     href: '/events',
-    requiresExclusive: true,
   },
   {
     icon: FiTag,
     label: 'Offers',
     href: '/offers',
-    requiresExclusive: true,
   },
 ]
 
@@ -73,11 +65,6 @@ interface SidebarProps {
 export function Sidebar({ isCollapsed = false }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
-  const { status } = useSession()
-
-  const { user, isExclusivePlan, isBasicPlan, isSubscriptionExpired } =
-    useUserStore()
 
   const isActiveRoute = (href: string) => {
     if (href === '/') {
@@ -86,61 +73,12 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
     return pathname === href || pathname.startsWith(href + '/')
   }
 
-  const hasAccess = () => {
-    if (!user) return false
-    if (user.role === 'admin') return true
-    if (isExclusivePlan()) return true
-    if (isBasicPlan() && !isSubscriptionExpired()) return true
-    return false
-  }
-
-  const handleExclusiveClick = (
-    e: React.MouseEvent,
-    href: string,
-    requiresExclusive?: boolean,
-  ) => {
-    // If route doesn't require exclusive access, navigate normally
-    if (!requiresExclusive) {
-      return
-    }
-
-    e.preventDefault()
-
-    // Check if user is signed in
-    if (status !== 'authenticated' || !user) {
-      toast.error('Please sign in to access exclusive content')
-      setIsOpen(false)
-      router.push('/signin')
-      return
-    }
-
-    // Check if user has access (Admin, Exclusive, or Active Basic)
-    if (!hasAccess()) {
-      if (isBasicPlan() && isSubscriptionExpired()) {
-        toast.error('Your Basic plan trial has expired. Please upgrade.')
-      } else {
-        toast.error('Please upgrade to access this content', {
-          duration: 4000,
-        })
-      }
-      setIsOpen(false)
-      router.push('/plans')
-      return
-    }
-
-    // User has access, navigate to the route
-    setIsOpen(false)
-    router.push(href)
-  }
-
-  const linkStyle = (isActive: boolean, isLocked?: boolean) =>
+  const linkStyle = (isActive: boolean) =>
     cn(
       'flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-all relative group',
       isActive
         ? 'bg-[#1f1f1f] text-white shadow-lg shadow-black/20'
-        : isLocked
-          ? 'text-zinc-500 cursor-pointer hover:bg-[#141414] hover:text-zinc-400'
-          : 'text-zinc-400 hover:bg-[#141414] hover:text-white',
+        : 'text-zinc-400 hover:bg-[#141414] hover:text-white',
       isCollapsed ? 'justify-center px-2' : 'gap-3',
     )
 
@@ -277,27 +215,21 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
           {/* Exclusive Items */}
           <div>
             {!isCollapsed && (
-              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555] flex items-center justify-between">
-                <span>Exclusive</span>
-                {status === 'authenticated' && !hasAccess() && (
-                  <Lock className="h-3 w-3 text-yellow-500/80" />
-                )}
+              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555]">
+                Exclusive
               </h3>
             )}
             <nav className="space-y-1.5">
               {exclusiveItems.map(item => {
                 const Icon = item.icon
                 const isActive = isActiveRoute(item.href)
-                const isLocked = status === 'authenticated' && !hasAccess()
 
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={e =>
-                      handleExclusiveClick(e, item.href, item.requiresExclusive)
-                    }
-                    className={linkStyle(isActive, isLocked)}
+                    onClick={() => setIsOpen(false)}
+                    className={linkStyle(isActive)}
                     title={isCollapsed ? item.label : undefined}
                   >
                     <Icon
@@ -305,16 +237,11 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                         'h-6 w-6 flex-shrink-0',
                         isActive
                           ? 'text-white'
-                          : isLocked
-                            ? 'text-zinc-600'
-                            : 'text-zinc-500 group-hover:text-white',
+                          : 'text-zinc-500 group-hover:text-white',
                       )}
                     />
                     {!isCollapsed && (
                       <span className="flex-1">{item.label}</span>
-                    )}
-                    {!isCollapsed && isLocked && (
-                      <Lock className="h-4 w-4 text-yellow-500/70 flex-shrink-0" />
                     )}
                   </Link>
                 )

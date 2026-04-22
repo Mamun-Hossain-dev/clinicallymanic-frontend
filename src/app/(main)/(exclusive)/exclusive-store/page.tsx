@@ -28,7 +28,7 @@ export default function FashionPage() {
           </div>
         }
       >
-        <ShopSection isExclusive={true} />
+        <ShopSection title="Exclusive Collection" />
       </Suspense>
     </div>
   )
