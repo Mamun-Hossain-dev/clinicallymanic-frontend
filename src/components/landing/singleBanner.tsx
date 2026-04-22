@@ -11,6 +11,9 @@ interface SingleBannerProps {
   showTitle?: boolean
 }
 
+const normalizeBannerCategory = (value?: string) =>
+  value?.trim().toLowerCase()
+
 export default function SingleBanner({ type }: SingleBannerProps) {
   const [banner, setBanner] = useState<Banner | null>(null)
   const [loading, setLoading] = useState(true)
@@ -22,7 +25,9 @@ export default function SingleBanner({ type }: SingleBannerProps) {
         const response = await fetchBanners(type)
         // Get first active banner of this type
         const activeBanner = response.data.find(
-          b => b.status === 'active' && b.type === type,
+          b =>
+            b.status === 'active' &&
+            normalizeBannerCategory(b.type) === normalizeBannerCategory(type),
         )
         setBanner(activeBanner || null)
       } catch (error) {

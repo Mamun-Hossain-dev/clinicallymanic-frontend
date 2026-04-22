@@ -21,10 +21,15 @@ const ITEMS_PER_PAGE = 8
 
 interface ShopPageProps {
   isHomePage?: boolean
-  isExclusive?: boolean
+  title?: string
+  defaultType?: 'standard' | 'exclusive'
 }
 
-export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
+export default function ShopPage({
+  isHomePage,
+  title = 'Shop Collection',
+  defaultType,
+}: ShopPageProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -37,12 +42,7 @@ export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
   const currentPage = isHomePage ? 1 : currentPageParams
   const limit = isHomePage ? 4 : ITEMS_PER_PAGE
 
-  // Exclusive logic: Either passed via props OR URL type param (if we want robust support)
-  // For now, if prop isExclusive is true, we force type='exclusive'.
-  // We can also support ?type=... from URL if needed for 'shop' page to filter exclusive.
-  const typeParam = isExclusive
-    ? 'exclusive'
-    : searchParams.get('type') || undefined
+  const typeParam = searchParams.get('type') || defaultType || undefined
 
   const [selectedShopId, setSelectedShopId] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -132,7 +132,7 @@ export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-3xl font-medium tracking-wider text-white">
-            {isExclusive ? 'Exclusive Collection' : 'Shop Collection'}
+            {title}
           </h2>
         </div>
         <ShopSkeleton />
@@ -145,7 +145,7 @@ export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-medium tracking-wider text-white">
-            {isExclusive ? 'Exclusive Collection' : 'Shop Collection'}
+            {title}
           </h2>
         </div>
         <ShopError onRetry={() => refetch()} />
@@ -162,16 +162,15 @@ export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
       <div className="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-medium tracking-wider text-white">
-            {isExclusive ? 'Exclusive Collection' : 'Shop Collection'}
+            {title}
           </h2>
           <p className="mt-2 text-sm text-zinc-400">
-            Discover {!isHomePage ? totalItems : ''} amazing{' '}
-            {isExclusive ? 'exclusive ' : ''}products
+            Discover {!isHomePage ? totalItems : ''} amazing products
           </p>
         </div>
 
         {isHomePage ? (
-          <Link href={isExclusive ? '/exclusive-fashion' : '/shop'}>
+          <Link href={defaultType === 'exclusive' ? '/exclusive-store' : '/shop'}>
             <button className="hidden rounded-lg bg-zinc-800 px-6 py-2 transition-colors hover:bg-zinc-700 sm:block">
               View All
             </button>
@@ -254,9 +253,7 @@ export default function ShopPage({ isHomePage, isExclusive }: ShopPageProps) {
             No products found
           </h3>
           <p className="text-zinc-400">
-            {isExclusive
-              ? 'No exclusive products available at the moment.'
-              : 'Check back later for new items!'}
+            Check back later for new items!
           </p>
         </div>
       ) : (

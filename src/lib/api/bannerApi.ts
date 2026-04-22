@@ -48,6 +48,9 @@ const normalizeBanner = (banner: BackendBanner): Banner => ({
   updatedAt: banner.updatedAt,
 })
 
+const normalizeBannerCategory = (value?: string) =>
+  value?.trim().toLowerCase()
+
 // Fetch all banners or filter by type
 export const fetchBanners = async (type?: string): Promise<BannerResponse> => {
   const url = type
