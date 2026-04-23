@@ -1,12 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
-import { fetchBanners, Banner } from '@/lib/api/bannerApi'
 import { BannerSkeleton } from '../landing/bannerSkeleton'
-import { useUserStore } from '@/app/store/useUserProfileStore'
+import { useBanners } from '@/hooks/useBanners'
 
 // Map banner types to routes
 const getBannerRoute = (type: string): string => {
@@ -28,31 +27,7 @@ const getBannerRoute = (type: string): string => {
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [banners, setBanners] = useState<Banner[]>([])
-  const [loading, setLoading] = useState(true)
-
-  const { user } = useUserStore()
-
-  // Fetch banners from API
-  useEffect(() => {
-    const loadBanners = async () => {
-      try {
-        setLoading(true)
-        const response = await fetchBanners()
-        // Filter only active banners
-        const activeBanners = response.data.filter(
-          banner => banner.status === 'active',
-        )
-        setBanners(activeBanners)
-      } catch (error) {
-        console.error('Failed to load banners:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadBanners()
-  }, [])
+  const { data: banners = [], isLoading } = useBanners()
 
   // Auto-play functionality
   useEffect(() => {
@@ -86,7 +61,7 @@ export default function HeroCarousel() {
     setTimeout(() => setIsAnimating(false), 500)
   }
 
-  if (loading) {
+  if (isLoading) {
     return <BannerSkeleton />
   }
 

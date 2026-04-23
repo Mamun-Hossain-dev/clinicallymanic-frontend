@@ -48,9 +48,6 @@ const normalizeBanner = (banner: BackendBanner): Banner => ({
   updatedAt: banner.updatedAt,
 })
 
-const normalizeBannerCategory = (value?: string) =>
-  value?.trim().toLowerCase()
-
 // Fetch all banners or filter by type
 export const fetchBanners = async (type?: string): Promise<BannerResponse> => {
   const url = type
@@ -63,7 +60,6 @@ export const fetchBanners = async (type?: string): Promise<BannerResponse> => {
       'Content-Type': 'application/json',
     },
     // 👇 if using App Router (SSR / RSC)
-    cache: 'no-store', // or next: { revalidate: 60 }
   })
 
   if (!res.ok) {
