@@ -163,6 +163,8 @@ export const useGetAllShops = (params: UseGetAllShopsParams) => {
       }
     },
     placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   })
 }
 
@@ -183,6 +185,8 @@ export const useGetShopById = (id: string | null) => {
       }
     },
     enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   })
 }
 

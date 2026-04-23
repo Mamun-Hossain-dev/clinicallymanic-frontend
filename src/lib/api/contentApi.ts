@@ -19,7 +19,6 @@ async function fetchAPI<T>(url: string, options?: RequestInit): Promise<T> {
       'Content-Type': 'application/json',
       ...options?.headers,
     },
-    cache: 'no-store', // Ensure fresh data
   })
 
   if (!res.ok) {

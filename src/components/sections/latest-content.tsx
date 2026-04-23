@@ -18,6 +18,8 @@ export default function LatestContent() {
       })
       return response.data
     },
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   })
 
   if (isLoading) {

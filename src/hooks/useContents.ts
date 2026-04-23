@@ -33,6 +33,8 @@ export function useContents(params: UseContentsParams = {}): UseContentsReturn {
     queryFn: () => getContents(queryParams),
     enabled,
     placeholderData: keepPreviousData, // pagination smooth
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   })
 
   return {

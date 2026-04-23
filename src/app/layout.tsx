@@ -5,9 +5,6 @@ import Providers from './providers'
 import './globals.css'
 import { Toaster } from 'sonner'
 
-export const dynamic = 'force-dynamic'
-export const fetchCache = 'force-no-store'
-
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],

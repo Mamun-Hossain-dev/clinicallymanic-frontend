@@ -94,6 +94,8 @@ export const useGetUserProfile = (accessToken: string, userId?: string) => {
       }
     },
     enabled: !!accessToken && !!userId,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
   })
 }
 

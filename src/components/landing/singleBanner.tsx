@@ -1,46 +1,20 @@
 // ==================== FILE: components/SingleBanner.tsx ====================
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
-import { fetchBanners, Banner } from '@/lib/api/bannerApi'
 import { SingleBannerSkeleton } from './bannerSkeleton'
+import { useBannerByType } from '@/hooks/useBanners'
 
 interface SingleBannerProps {
   type: string
   showTitle?: boolean
 }
 
-const normalizeBannerCategory = (value?: string) =>
-  value?.trim().toLowerCase()
-
 export default function SingleBanner({ type }: SingleBannerProps) {
-  const [banner, setBanner] = useState<Banner | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { data: banner, isLoading } = useBannerByType(type)
 
-  useEffect(() => {
-    const loadBanner = async () => {
-      try {
-        setLoading(true)
-        const response = await fetchBanners(type)
-        // Get first active banner of this type
-        const activeBanner = response.data.find(
-          b =>
-            b.status === 'active' &&
-            normalizeBannerCategory(b.type) === normalizeBannerCategory(type),
-        )
-        setBanner(activeBanner || null)
-      } catch (error) {
-        console.error(`Failed to load ${type} banner:`, error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadBanner()
-  }, [type])
-
-  if (loading) {
+  if (isLoading) {
     return <SingleBannerSkeleton />
   }
 
