@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, Eye } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { stripHtml } from '@/lib/stripHtml'
@@ -23,7 +23,7 @@ export default function ArticleCard({
     <Link href={`/article/${item._id}`}>
       <div
         className={cn(
-          'group relative overflow-hidden rounded-sm bg-zinc-900 border border-zinc-800 transition-all duration-500 hover:border-zinc-700 hover:shadow-2xl hover:shadow-black/30 flex flex-col h-full',
+          'group relative overflow-hidden rounded-[12px] bg-[#161616] border border-white/[0.07] transition-all duration-[250ms] ease-apple hover:-translate-y-[3px] hover:border-white/[0.14] flex flex-col h-full',
           variant === 'featured' && 'col-span-2',
           variant === 'compact' && 'flex gap-4',
         )}
@@ -31,8 +31,8 @@ export default function ArticleCard({
         {/* Thumbnail */}
         <div
           className={cn(
-            'relative overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-950',
-            variant === 'compact' ? 'w-40 h-40' : 'h-56',
+            'relative overflow-hidden',
+            variant === 'compact' ? 'w-40 h-36' : 'h-52',
           )}
         >
           <Image
@@ -40,36 +40,35 @@ export default function ArticleCard({
             alt={item.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
           />
 
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
           {/* Category */}
-          <div className="absolute top-4 left-4 z-10">
-            <span className="px-3 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-full border border-white/30">
+          <div className="absolute top-3 left-3 z-10">
+            <span className="px-2.5 py-0.5 bg-white/[0.08] text-[#86868B] text-[11px] font-medium rounded-full">
               {item.category}
             </span>
           </div>
 
           {/* Read time */}
-          <div className="absolute bottom-4 left-4 z-10">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-black/70 backdrop-blur-sm rounded-full">
-              <Eye className="h-3 w-3 text-zinc-300" />
-              <span className="text-xs font-medium text-zinc-300">
-                10 min read
+          <div className="absolute bottom-3 right-3 z-10">
+            <div className="px-[6px] py-[2px] bg-black/75 backdrop-blur-[4px] rounded-[4px]">
+              <span className="text-[11px] font-medium text-[#F5F5F7]">
+                10:30
               </span>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className={cn('p-6 flex-1 flex flex-col', variant === 'compact' && 'flex-1')}>
+        <div className={cn('p-4 flex-1 flex flex-col', variant === 'compact' && 'flex-1')}>
           <h3
             className={cn(
-              'font-bold mb-3 line-clamp-2 text-white group-hover:text-blue-400 transition-colors duration-300',
-              variant === 'featured' ? 'text-2xl' : 'text-xl',
+              'font-semibold leading-[1.4] mb-2 line-clamp-2 text-[#F5F5F7] group-hover:text-white transition-colors duration-200 ease-apple',
+              variant === 'featured' ? 'text-[22px]' : 'text-[15px]',
             )}
           >
             {item.title}
@@ -77,13 +76,13 @@ export default function ArticleCard({
 
           {/* ✅ Plain text preview (HTML stripped) */}
           {previewText && variant !== 'compact' && (
-            <p className="text-zinc-400 text-xs mb-4 line-clamp-2">
+            <p className="text-[#9A9A9F] text-[13px] leading-[1.65] mb-4 line-clamp-3 pl-3 border-l border-white/[0.12] italic">
               {previewText}
             </p>
           )}
 
           <div className="flex items-center justify-between gap-3 text-xs mt-auto">
-            <span className="flex items-center gap-2 text-zinc-500">
+            <span className="flex items-center gap-2 text-[#9A9A9F] text-[11px]">
               <Calendar className="h-3 w-3" />
               {new Date(item.createdAt).toLocaleDateString('en-US', {
                 month: 'short',
@@ -91,15 +90,8 @@ export default function ArticleCard({
                 year: 'numeric',
               })}
             </span>
-
-            <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs font-medium">
-              Article
-            </span>
           </div>
         </div>
-
-        {/* Hover border */}
-        <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-blue-500/30 transition-all duration-500 pointer-events-none" />
       </div>
     </Link>
   )

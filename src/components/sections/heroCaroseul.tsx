@@ -82,10 +82,10 @@ export default function HeroCarousel() {
               <div
                 key={banner._id}
                 className={`absolute inset-0 transition-all duration-500 ease-in-out ${idx === currentSlide
-                    ? 'opacity-100 translate-x-0'
-                    : idx < currentSlide
-                      ? 'opacity-0 -translate-x-full'
-                      : 'opacity-0 translate-x-full'
+                  ? 'opacity-100 translate-x-0'
+                  : idx < currentSlide
+                    ? 'opacity-0 -translate-x-full'
+                    : 'opacity-0 translate-x-full'
                   }`}
               >
                 <div className="block h-full w-full">
@@ -104,33 +104,33 @@ export default function HeroCarousel() {
                     className="absolute inset-0"
                     style={{
                       background:
-                        'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.1) 100%)',
+                        'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
                     }}
                   />
 
                   {/* Text with fade animation */}
                   <div
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ${idx === currentSlide
-                        ? 'opacity-100 translate-y-0'
-                        : 'opacity-0 translate-y-4'
+                    className={`absolute inset-0 flex items-center justify-start transition-all duration-700 ${idx === currentSlide
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-4'
                       }`}
                   >
-                    <div className="text-center px-4">
-                      <p className="mb-2 text-xs font-medium uppercase tracking-widest text-zinc-100 animate-fade-in-up">
+                    <div className="text-left px-8 md:px-16 w-full max-w-7xl">
+                      <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.15em] text-white/50 animate-fade-in-up">
                         {banner.type}
                       </p>
-                      <h3 className="text-2xl md:text-5xl font-bold text-white animate-fade-in-up animation-delay-150">
+                      <h3 className="font-bold text-[#F5F5F7] tracking-[-0.02em] animate-fade-in-up animation-delay-150" style={{ fontSize: 'clamp(32px, 5vw, 56px)' }}>
                         {banner.title}
                       </h3>
-                      <p className="mt-3 text-sm md:text-base text-zinc-200 animate-fade-in-up animation-delay-300">
+                      <p className="mt-3 text-[15px] text-white/60 max-w-[480px] animate-fade-in-up animation-delay-300">
                         {banner.description}
                       </p>
 
-                      {/* Explore Button - Glassy */}
+                      {/* Explore Button - Solid */}
                       <div className="mt-6 animate-fade-in-up animation-delay-450 hidden md:block">
                         <Link
                           href={bannerRoute}
-                          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md text-white font-semibold rounded-lg border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all shadow-lg"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-full hover:bg-white/85 text-[14px] font-medium transition-all duration-200 ease-apple"
                         >
                           Explore Now
                           <ExternalLink className="w-4 h-4" />
@@ -166,9 +166,9 @@ export default function HeroCarousel() {
               <button
                 key={idx}
                 onClick={() => goToSlide(idx)}
-                className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide
-                    ? 'w-7 bg-white'
-                    : 'w-3 bg-white/40 hover:bg-white/60'
+                className={`h-[2px] rounded-full transition-all duration-300 ease-apple ${idx === currentSlide
+                  ? 'w-[24px] bg-white'
+                  : 'w-[20px] bg-white/30'
                   }`}
               />
             ))}
@@ -184,9 +184,9 @@ export default function HeroCarousel() {
               key={banner._id}
               type="button"
               onClick={() => goToSlide(idx)}
-              className={`relative aspect-[12/5] cursor-pointer overflow-hidden rounded-lg transition-all duration-300 ${idx === currentSlide
-                  ? 'ring-2 ring-white scale-105'
-                  : 'ring-1 ring-zinc-700 hover:ring-zinc-500 hover:scale-105'
+              className={`relative aspect-[12/5] cursor-pointer overflow-hidden rounded-[10px] transition-all duration-200 ease-apple ${idx === currentSlide
+                ? 'border-b-[2px] border-white scale-[1.03]'
+                : 'hover:scale-[1.03]'
                 }`}
             >
               <Image
@@ -199,11 +199,11 @@ export default function HeroCarousel() {
 
               <div
                 className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${idx === currentSlide
-                    ? 'bg-black/40'
-                    : 'bg-black/50 hover:bg-black/40'
+                  ? 'bg-black/40'
+                  : 'bg-black/50 hover:bg-black/40'
                   }`}
               >
-                <p className="px-2 text-xs font-semibold text-white text-center">
+                <p className="px-2 text-[11px] font-semibold text-white text-center uppercase tracking-[0.05em] drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                   {banner.type}
                 </p>
               </div>

@@ -17,11 +17,6 @@ const planIcons = {
   exclusive: Zap,
 }
 
-const planColors = {
-  basic: 'from-blue-500 to-blue-600',
-  exclusive: 'from-purple-500 to-purple-600',
-}
-
 export default function PlansPage() {
   const { data: session } = useSession()
   const router = useRouter()
@@ -63,10 +58,10 @@ export default function PlansPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 rounded-full border-4 border-purple-500 border-t-transparent animate-spin" />
-          <p className="text-white text-lg">Loading plans...</p>
+          <div className="h-10 w-10 rounded-full border-2 border-white/20 border-t-white/60 animate-spin" />
+          <p className="text-[#9A9A9F] text-[14px]">Loading plans...</p>
         </div>
       </div>
     )
@@ -98,23 +93,20 @@ export default function PlansPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] py-16 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20">
-            <Sparkles className="h-4 w-4 text-purple-400" />
-            <span className="text-purple-400 text-sm font-semibold">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.1]">
+            <Sparkles className="h-3.5 w-3.5 text-[#9A9A9F]" />
+            <span className="text-[#9A9A9F] text-[11px] font-semibold uppercase tracking-[0.12em]">
               SUBSCRIPTION PLANS
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-            Choose Your{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-              Perfect Plan
-            </span>
+          <h1 className="text-[42px] md:text-[54px] font-bold text-[#F5F5F7] tracking-[-0.02em] mb-6">
+            Choose Your Perfect Plan
           </h1>
-          <p className="text-xl text-[#b5b5b5] max-w-2xl mx-auto">
+          <p className="text-[16px] text-[#9A9A9F] max-w-2xl mx-auto line-height-relaxed">
             Unlock exclusive content, premium features, and priority support
             with our flexible subscription options
           </p>
@@ -125,9 +117,6 @@ export default function PlansPage() {
           {sortedPlans.map((plan: any) => {
             const key = plan.name.toLowerCase()
             const Icon = planIcons[key as keyof typeof planIcons] || Star
-            const colorClass =
-              planColors[key as keyof typeof planColors] ||
-              'from-gray-500 to-gray-600'
 
             const features: string[] = Array.isArray(plan.features)
               ? plan.features
@@ -151,113 +140,91 @@ export default function PlansPage() {
             return (
               <div
                 key={plan._id}
-                className={`relative rounded-2xl p-8 border transition-all duration-300 ${
-                  isPro
-                    ? 'border-purple-500 bg-gradient-to-br from-purple-900/20 via-[#0f0f0f] to-[#0f0f0f] md:scale-110 shadow-2xl shadow-purple-500/30 z-10'
-                    : isBasic
-                      ? 'border-blue-500/50 bg-gradient-to-br from-blue-900/10 via-[#0f0f0f] to-[#0f0f0f]'
-                      : 'border-[#262626] bg-[#0f0f0f] hover:border-[#404040]'
-                }`}
+                className={`relative rounded-[16px] p-8 border transition-all duration-300 ${isPro
+                  ? 'border-white/[0.2] bg-[#1a1a1a] md:scale-105 z-10'
+                  : isBasic
+                    ? 'border-white/[0.12] bg-[#161616]'
+                    : 'border-white/[0.07] bg-[#161616] hover:border-white/[0.14]'
+                  }`}
               >
-                {/* Badge */}
                 {isPro && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                    <div className="bg-white text-black px-6 py-1.5 rounded-full text-[11px] font-bold flex items-center gap-1">
                       <Crown className="h-3 w-3" />
-                      BEST VALUE - SAVE {yearlySavings?.percentage}%
+                      BEST VALUE — SAVE {yearlySavings?.percentage}%
                     </div>
                   </div>
                 )}
 
                 {isBasic && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-1.5 rounded-full text-xs font-bold shadow-lg">
+                    <div className="bg-[#F5F5F7] text-black px-6 py-1.5 rounded-full text-[11px] font-bold">
                       🎉 7 DAYS FREE TRIAL
                     </div>
                   </div>
                 )}
 
-                {/* Icon */}
                 <div
-                  className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${colorClass} mb-6 shadow-lg`}
+                  className={`inline-flex p-3 rounded-[10px] bg-white/[0.07] mb-6`}
                 >
-                  <Icon className="h-8 w-8 text-white" />
+                  <Icon className="h-6 w-6 text-[#9A9A9F]" />
                 </div>
 
-                {/* Name */}
-                <h3 className="text-3xl font-bold text-white mb-3 capitalize">
+                <h3 className="text-[24px] font-bold text-[#F5F5F7] mb-2 capitalize">
                   {displayName}
                 </h3>
 
-                {/* Type Badge */}
-                <div className="inline-block px-4 py-1.5 rounded-full bg-gray-800/50 border border-gray-700 mb-6">
-                  <span className="text-sm text-purple-400 font-semibold capitalize">
-                    {plan.type === 'weekly'
-                      ? 'Weekly'
-                      : plan.type === 'monthly'
-                        ? 'Monthly'
-                        : 'Yearly'}
+                <div className="inline-block px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] mb-6">
+                  <span className="text-[12px] text-[#9A9A9F] font-medium capitalize">
+                    {plan.type === 'weekly' ? 'Weekly' : plan.type === 'monthly' ? 'Monthly' : 'Yearly'}
                   </span>
                 </div>
 
-                {/* Price */}
                 <div className="mb-8">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-6xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    <span className="text-[52px] font-bold text-[#F5F5F7]">
                       ${plan.price}
                     </span>
-                    <span className="text-[#b5b5b5] text-lg">
-                      /
-                      {plan.type === 'weekly'
-                        ? 'week'
-                        : plan.type === 'monthly'
-                          ? 'month'
-                          : 'year'}
+                    <span className="text-[#6E6E73] text-[15px]">
+                      /{plan.type === 'weekly' ? 'week' : plan.type === 'monthly' ? 'month' : 'year'}
                     </span>
                   </div>
                   {isYearly && yearlySavings && (
                     <div className="flex items-center gap-2">
-                      <span className="text-green-400 text-sm font-semibold">
+                      <span className="text-[#9A9A9F] text-[13px] font-medium">
                         💰 Save ${yearlySavings.savings} annually
                       </span>
                     </div>
                   )}
                   {isBasic && (
-                    <p className="text-blue-400 text-sm font-semibold">
+                    <p className="text-[#9A9A9F] text-[13px] font-medium">
                       ✨ Get 7-day trial with full access to exclusive content
                     </p>
                   )}
                 </div>
 
-                {/* Features */}
-                <ul className="mb-8 space-y-4">
+                <ul className="mb-8 space-y-3">
                   {features.map((feature, index) => (
                     <li key={index} className="flex gap-3 items-start">
-                      <span
-                        className={`mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br ${colorClass} flex-shrink-0`}
-                      >
-                        <Check className="h-4 w-4 text-white" />
+                      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.08] flex-shrink-0">
+                        <Check className="h-3 w-3 text-[#9A9A9F]" />
                       </span>
-                      <span className="text-sm text-[#d1d1d1] leading-relaxed">
+                      <span className="text-[13px] text-[#9A9A9F] leading-relaxed">
                         {feature}
                       </span>
                     </li>
                   ))}
                 </ul>
 
-                {/* Button */}
                 <Button
                   onClick={() => handleSubscribe(plan._id)}
-                  disabled={
-                    processingId === plan._id || plan.status !== 'active'
-                  }
-                  className={`w-full py-7 text-base font-bold rounded-xl transition-all shadow-lg ${
-                    isPro
-                      ? 'bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 hover:from-purple-600 hover:via-pink-600 hover:to-purple-700 text-white shadow-purple-500/50'
-                      : isBasic
-                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-blue-500/50'
-                        : 'bg-white hover:bg-gray-100 text-black'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  disabled={processingId === plan._id || plan.status !== 'active'}
+                  className={`w-full py-6 text-[14px] font-bold rounded-full transition-all ${isPro
+                    ? 'bg-white text-black hover:bg-white/85'
+                    : isBasic
+                      ? 'bg-white text-black hover:bg-white/85'
+                      : 'bg-white/[0.08] text-[#F5F5F7] border border-white/[0.12] hover:bg-white/[0.12]'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {processingId === plan._id
                     ? 'Processing...'
@@ -272,9 +239,8 @@ export default function PlansPage() {
           })}
         </div>
 
-        {/* Footer Note */}
         <div className="mt-20 text-center space-y-4">
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="flex items-center justify-center gap-8 text-[12px] text-[#6E6E73]">
             <span>🔒 Secure Payment</span>
             <span>⚡ Instant Access</span>
             <span>🎯 No Hidden Fees</span>

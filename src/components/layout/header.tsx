@@ -2,7 +2,9 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { User, LogOut, Menu, ShoppingCart, Heart } from 'lucide-react'
+import { cn } from '@/lib/utils'
 // import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
@@ -18,6 +20,15 @@ interface HeaderProps {
 export function Header({ onMenuClick }: HeaderProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const accessToken = session?.user?.accessToken || ''
   const { data: profileData } = useGetUserProfile(accessToken, session?.user?.id)
@@ -30,7 +41,10 @@ export function Header({ onMenuClick }: HeaderProps) {
   const isLoggedIn = status === 'authenticated'
 
   return (
-    <header className="sticky  top-0 z-40 border-b border-[#262626] bg-[#0b0b0b] px-4 py-[22px]">
+    <header className={cn(
+      "sticky top-0 z-40 px-4 py-[22px] transition-all duration-300 ease-apple",
+      isScrolled ? "bg-[rgba(10,10,10,0.8)] backdrop-blur-[20px] border-b border-white/5" : "bg-transparent border-transparent"
+    )}>
       <div className="flex items-center justify-between gap-4">
         {/* Left: Menu + Logo */}
         <div className="flex items-center gap-4">
@@ -39,7 +53,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             className="hidden md:flex rounded-md p-2 hover:bg-[#1a1a1a] transition-colors"
             aria-label="Toggle sidebar"
           >
-            <Menu className="h-5 w-5 text-white" />
+            <Menu className="h-5 w-5 text-[#86868B] hover:text-[#F5F5F7] transition-colors duration-200" />
           </button>
 
           {/* Logo for mobile */}
@@ -61,35 +75,29 @@ export function Header({ onMenuClick }: HeaderProps) {
         {/* Right: Cart, Wishlist, Profile/Login */}
         <div className="flex items-center gap-4">
           {/* Wishlist Icon */}
-          <Link href="/favorites">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative hover:bg-[#1a1a1a] transition-colors"
-            >
-              <Heart className="h-7 w-7 text-white" />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center">
-                  {wishlistCount > 9 ? '9+' : wishlistCount}
-                </span>
-              )}
-            </Button>
+          <Link
+            href="/favorites"
+            className="relative inline-flex items-center justify-center rounded-md hover:bg-white/5 transition-colors h-10 w-10"
+          >
+            <Heart className="h-[22px] w-[22px] text-[#86868B] hover:text-[#F5F5F7] transition-colors duration-200" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[9px] font-bold text-white flex items-center justify-center">
+                {wishlistCount > 9 ? '9+' : wishlistCount}
+              </span>
+            )}
           </Link>
 
           {/* Cart Icon */}
-          <Link href="/carts">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative hover:bg-[#1a1a1a] transition-colors"
-            >
-              <ShoppingCart className="h-7 w-7 text-white" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-blue-500 text-[10px] font-bold text-white flex items-center justify-center">
-                  {cartCount > 9 ? '9+' : cartCount}
-                </span>
-              )}
-            </Button>
+          <Link
+            href="/carts"
+            className="relative inline-flex items-center justify-center rounded-md hover:bg-white/5 transition-colors h-10 w-10"
+          >
+            <ShoppingCart className="h-[22px] w-[22px] text-[#86868B] hover:text-[#F5F5F7] transition-colors duration-200" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[9px] font-bold text-white flex items-center justify-center">
+                {cartCount > 9 ? '9+' : cartCount}
+              </span>
+            )}
           </Link>
 
           {isLoggedIn ? (
@@ -117,18 +125,16 @@ export function Header({ onMenuClick }: HeaderProps) {
               <Button
                 onClick={() => signOut()}
                 variant="ghost"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 border border-[#303030] 
-                           rounded-md hover:bg-[#1a1a1a] hover:border-white text-white transition-colors"
+                className="hidden sm:flex items-center gap-2 px-4 py-1.5 border border-white/20 rounded-full hover:bg-white/[0.08] hover:text-[#F5F5F7] text-[#F5F5F7] transition-all duration-200 ease-apple bg-transparent"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="text-sm">Logout</span>
+                <span className="text-[13px] font-medium">Logout</span>
               </Button>
             </>
           ) : (
             <Button
               onClick={() => router.push('/signin')}
-              className="hidden sm:flex items-center gap-2 px-4 py-2 border border-[#303030] 
-                           rounded-md hover:bg-[#1a1a1a] hover:border-white text-white transition-colors"
+              className="hidden sm:flex items-center gap-2 px-4 py-1.5 border border-white/20 rounded-full hover:bg-white/[0.08] hover:border-white/20 text-[#F5F5F7] text-[13px] transition-all duration-200 ease-apple bg-transparent"
             >
               Sign in
             </Button>

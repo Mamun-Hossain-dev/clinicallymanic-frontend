@@ -10,6 +10,7 @@ import ContentError, { EmptyState } from '../error/content-error'
 import { Pagination } from '../common/pagination'
 import ContentLoading from '../content-loading-state'
 import { useMusicContents } from '@/hooks/useContents'
+import { motion } from 'framer-motion'
 
 interface MusicSectionProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,8 +93,15 @@ export default function MusicSection({
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {musicItems.map(item => (
-          <ContentCard key={item._id} item={item} />
+        {musicItems.map((item, index) => (
+          <motion.div
+            key={item._id}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.06, duration: 0.4 }}
+          >
+            <ContentCard item={item} />
+          </motion.div>
         ))}
       </div>
 

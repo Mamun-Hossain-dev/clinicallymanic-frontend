@@ -75,10 +75,10 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
 
   const linkStyle = (isActive: boolean) =>
     cn(
-      'flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-all relative group',
+      'flex items-center rounded-lg px-3 py-2 text-[14px] font-normal transition-all duration-200 ease-apple relative group',
       isActive
-        ? 'bg-[#1f1f1f] text-white shadow-lg shadow-black/20'
-        : 'text-zinc-400 hover:bg-[#141414] hover:text-white',
+        ? 'bg-white/10 text-[#F5F5F7] border-l-2 border-accent rounded-l-none'
+        : 'text-[#A1A1A6] hover:bg-white/5 hover:text-[#F5F5F7]',
       isCollapsed ? 'justify-center px-2' : 'gap-3',
     )
 
@@ -96,18 +96,18 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-50 flex h-screen flex-col bg-[#0b0b0b] border-r border-[#262626] transition-all duration-300 ease-in-out',
+          'fixed left-0 top-0 z-50 flex h-screen flex-col bg-[#111111] border-r border-white/5 transition-all duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : '-translate-x-full',
           'md:translate-x-0 md:sticky',
-          isCollapsed ? 'w-[88px]' : 'w-[320px]',
+          isCollapsed ? 'w-[88px]' : 'w-[220px]',
         )}
       >
         {/* Logo */}
         <div className="flex-shrink-0">
           {!isCollapsed && (
             <Link href="/" onClick={() => setIsOpen(false)}>
-              <div className="flex items-center gap-4 px-6 py-3 border-b border-[#262626]/50">
-                <div className="relative h-14 w-14 overflow-hidden rounded-full bg-[#1a1a1a] flex-shrink-0 ring-2 ring-[#262626] ring-offset-2 ring-offset-[#0b0b0b]">
+              <div className="flex items-center gap-3 px-5 pt-7 pb-4 border-b border-white/5">
+                <div className="relative h-10 w-10 overflow-hidden rounded-full bg-[#1a1a1a] flex-shrink-0 ring-1 ring-[#262626] ring-offset-1 ring-offset-[#0b0b0b]">
                   <Image
                     src="/logo.jpeg"
                     alt="Logo"
@@ -115,13 +115,10 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-base font-bold tracking-wider text-white whitespace-nowrap">
+                <div className="flex flex-col overflow-hidden">
+                  <span className="text-[13px] font-bold tracking-[-0.02em] text-[#F5F5F7] whitespace-nowrap truncate">
                     CLINICALLY MANIC
                   </span>
-                  {/* <span className="text-[10px] uppercase tracking-[0.2em] text-[#666] font-medium">
-                    Official Store
-                  </span> */}
                 </div>
               </div>
             </Link>
@@ -146,7 +143,7 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
           {/* Menu */}
           <div>
             {!isCollapsed && (
-              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555]">
+              <h3 className="mb-4 px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-[#444] mt-6">
                 Menu
               </h3>
             )}
@@ -163,11 +160,12 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                     title={isCollapsed ? item.label : undefined}
                   >
                     <Icon
+                      strokeWidth={1.5}
                       className={cn(
-                        'h-6 w-6 flex-shrink-0',
+                        'h-4 w-4 flex-shrink-0 transition-colors duration-200 ease-apple',
                         isActive
-                          ? 'text-white'
-                          : 'text-zinc-500 group-hover:text-white',
+                          ? 'text-[#F5F5F7]'
+                          : 'text-[#A1A1A6] group-hover:text-[#F5F5F7]',
                       )}
                     />
                     {!isCollapsed && <span>{item.label}</span>}
@@ -180,7 +178,7 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
           {/* Explore */}
           <div>
             {!isCollapsed && (
-              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555]">
+              <h3 className="mb-4 px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-[#444] mt-6">
                 Explore
               </h3>
             )}
@@ -198,11 +196,12 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                     title={isCollapsed ? item.label : undefined}
                   >
                     <Icon
+                      strokeWidth={1.5}
                       className={cn(
-                        'h-6 w-6 flex-shrink-0',
+                        'h-4 w-4 flex-shrink-0 transition-colors duration-200 ease-apple',
                         isActive
-                          ? 'text-white'
-                          : 'text-zinc-500 group-hover:text-white',
+                          ? 'text-[#F5F5F7]'
+                          : 'text-[#A1A1A6] group-hover:text-[#F5F5F7]',
                       )}
                     />
                     {!isCollapsed && <span>{item.label}</span>}
@@ -215,7 +214,7 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
           {/* Exclusive Items */}
           <div>
             {!isCollapsed && (
-              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555]">
+              <h3 className="mb-4 px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-[#444] mt-6">
                 Exclusive
               </h3>
             )}
@@ -233,11 +232,12 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                     title={isCollapsed ? item.label : undefined}
                   >
                     <Icon
+                      strokeWidth={1.5}
                       className={cn(
-                        'h-6 w-6 flex-shrink-0',
+                        'h-4 w-4 flex-shrink-0 transition-colors duration-200 ease-apple',
                         isActive
-                          ? 'text-white'
-                          : 'text-zinc-500 group-hover:text-white',
+                          ? 'text-[#F5F5F7]'
+                          : 'text-[#A1A1A6] group-hover:text-[#F5F5F7]',
                       )}
                     />
                     {!isCollapsed && (
@@ -252,7 +252,7 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
           {/* More */}
           <div>
             {!isCollapsed && (
-              <h3 className="mb-4 px-4 text-xs font-bold uppercase tracking-widest text-[#555]">
+              <h3 className="mb-4 px-4 text-[10px] font-medium uppercase tracking-[0.12em] text-[#444] mt-6">
                 More
               </h3>
             )}
@@ -269,11 +269,12 @@ export function Sidebar({ isCollapsed = false }: SidebarProps) {
                     title={isCollapsed ? item.label : undefined}
                   >
                     <Icon
+                      strokeWidth={1.5}
                       className={cn(
-                        'h-6 w-6 flex-shrink-0',
+                        'h-4 w-4 flex-shrink-0 transition-colors duration-200 ease-apple',
                         isActive
-                          ? 'text-white'
-                          : 'text-zinc-500 group-hover:text-white',
+                          ? 'text-[#F5F5F7]'
+                          : 'text-[#A1A1A6] group-hover:text-[#F5F5F7]',
                       )}
                     />
                     {!isCollapsed && <span>{item.label}</span>}

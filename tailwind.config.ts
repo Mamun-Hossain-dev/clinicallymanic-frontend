@@ -62,6 +62,9 @@ const config: Config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      transitionTimingFunction: {
+        'apple': 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+      },
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports

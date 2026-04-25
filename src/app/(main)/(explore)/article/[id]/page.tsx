@@ -24,12 +24,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <div className="min-h-screen">
       {/* Back */}
-      <div className="container mx-auto px-4 py-4">
+      <div className="px-4 py-4">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white hover:text-blue-400 transition-colors"
+          className="inline-flex items-center gap-2 text-[13px] text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           Back to Home
         </Link>
       </div>
@@ -41,34 +41,34 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <article>
             {/* Header */}
             <header className="mb-8">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <span className="px-3 py-1 bg-black text-white text-sm rounded-full">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span className="px-2.5 py-0.5 bg-white/[0.08] text-[#86868B] text-[11px] font-medium rounded-full">
                   {article.category}
                 </span>
 
-                <div className="flex items-center gap-4 text-gray-500 text-sm">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    {new Date(article.createdAt).toLocaleDateString()}
+                <div className="flex items-center gap-4 text-[#9A9A9F] text-[12px]">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {new Date(article.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />5 min read
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5" />5 min read
                   </span>
                 </div>
               </div>
 
-              <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              <h1 className="text-[28px] md:text-[38px] font-bold mb-6 text-[#F5F5F7] tracking-[-0.02em] leading-tight">
                 {article.title}
               </h1>
             </header>
 
             {/* Thumbnail */}
-            <div className="relative h-[420px] mb-10 rounded-xl overflow-hidden">
+            <div className="relative h-[400px] mb-10 rounded-[12px] overflow-hidden">
               <Image
                 src={article.thumbnail}
                 alt={article.title}
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 priority
               />
             </div>
@@ -84,7 +84,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
 
         <div className="max-w-7xl mx-auto mt-16">
-          <h3 className="text-2xl font-bold mb-6 text-white">
+          <span className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#6E6E73] mb-1 block">MORE LIKE THIS</span>
+          <h3 className="text-[22px] font-bold tracking-[-0.02em] text-[#F5F5F7] mb-6">
             Related Articles
           </h3>
           <CategorySection category={article.category} itemsPerPage={6} />

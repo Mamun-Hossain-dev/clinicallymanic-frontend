@@ -4,20 +4,20 @@
 
 :root {
   /* ===== Luxury Dark Theme ===== */
-  --bg-start: #000000;
-  --bg-end: #1a1a1a;
+  --bg-start: #0a0a0a;
+  --bg-end: #0a0a0a;
 
-  --foreground: #f5f5f5;
-  --muted-foreground: #a1a1aa;
+  --foreground: #F5F5F7;
+  --muted-foreground: #6E6E73;
 
-  --card-bg: #0f0f0f;
-  --border-color: #262626;
+  --card-bg: #161616;
+  --border-color: rgba(255, 255, 255, 0.06);
 
-  --primary: #000000;
+  --primary: #0a0a0a;
   --secondary: #fbfcfb; /* Spotify Green */
   --accent: #f8f8f8; /* YouTube Red */
-  --background: #f8fafc;
-  --card: #ffffff;
+  --background: #0a0a0a;
+  --card: #161616;
 }
 
 /* Full site background */
@@ -27,14 +27,15 @@ body {
 }
 
 body {
-  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  background: var(--bg-start);
   color: var(--foreground);
-  font-family: var(--font-alice);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
 }
 
 /* Reusable utility classes */
 .bg-site {
-  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  background: var(--bg-start);
 }
 
 .bg-card {
@@ -49,18 +50,7 @@ body {
   border-color: var(--border-color);
 }
 
-.bg-zoom {
-  animation: bgZoom 10s ease-in-out infinite alternate;
-}
-
-@keyframes bgZoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.1);
-  }
-}
+/* Removed bg-zoom per design upgrade */
 
 /* Custom Scrollbar - Black / Gray & Transparent */
 .custom-scrollbar::-webkit-scrollbar {
