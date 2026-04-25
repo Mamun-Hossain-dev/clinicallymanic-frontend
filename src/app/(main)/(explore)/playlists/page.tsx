@@ -4,6 +4,8 @@ import MusicSection from '@/components/sections/musicSection'
 import { getMusicContents } from '@/lib/api/contentApi'
 import ModalManager from '@/components/modals/modalManager'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   // music data fetch
   const musicContents = await getMusicContents()
@@ -14,11 +16,7 @@ export default async function Page() {
       <SingleBanner type="playLists" />
 
       {/* Music / Playlists Section */}
-      <MusicSection
-        contents={musicContents}
-        itemsPerPage={12}
-        showPagination={true}
-      />
+      <MusicSection contents={musicContents} itemsPerPage={12} showPagination={true} />
 
       {/* Modal Manager */}
       <ModalManager />
