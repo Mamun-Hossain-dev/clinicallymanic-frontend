@@ -51,29 +51,24 @@ export default function ContentLoading({
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="overflow-hidden rounded-lg bg-zinc-800/50 animate-pulse"
+          className="overflow-hidden rounded-[12px] bg-[#161616] border border-white/[0.07] animate-pulse"
         >
           {/* Thumbnail skeleton */}
-          <div className="h-48 bg-zinc-700/50" />
+          <div className="h-48 bg-white/[0.05]" />
 
           {/* Content skeleton */}
-          <div className="p-5 space-y-3">
+          <div className="p-4 space-y-3">
+            {/* Eyebrow placeholder */}
+            <div className="h-2.5 bg-white/[0.05] rounded-full w-20" />
             {/* Title */}
             <div className="space-y-2">
-              <div className="h-4 bg-zinc-700/50 rounded w-full" />
-              <div className="h-4 bg-zinc-700/50 rounded w-4/5" />
+              <div className="h-3.5 bg-white/[0.07] rounded-full w-full" />
+              <div className="h-3.5 bg-white/[0.07] rounded-full w-4/5" />
             </div>
-
-            {/* Description */}
-            <div className="space-y-2">
-              <div className="h-3 bg-zinc-700/50 rounded w-full" />
-              <div className="h-3 bg-zinc-700/50 rounded w-3/4" />
-            </div>
-
             {/* Meta info */}
-            <div className="flex items-center gap-3 pt-2">
-              <div className="h-6 w-20 bg-zinc-700/50 rounded-full" />
-              <div className="h-3 w-16 bg-zinc-700/50 rounded" />
+            <div className="flex items-center gap-3 pt-1">
+              <div className="h-5 w-16 bg-white/[0.05] rounded-full" />
+              <div className="h-2.5 w-14 bg-white/[0.04] rounded-full" />
             </div>
           </div>
         </div>

@@ -53,16 +53,16 @@ export default function ClinicallyManicFooter() {
   }
 
   return (
-    <footer className="bg-black text-white">
+    <footer className="bg-[#0a0a0a] border-t border-white/[0.06] text-white">
       <div className="max-w-full px-4 lg:px-6 mx-auto py-12">
         {/* Logo and Social */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-          <div className="text-3xl font-bold tracking-tight">
+          <div className="text-[22px] font-bold tracking-[-0.02em] text-[#F5F5F7]">
             CLINICALLY MANIC
           </div>
 
           <div className="flex items-center flex-col sm:flex-row gap-4 sm:gap-6">
-            <span className="text-sm font-semibold tracking-wide">
+            <span className="text-[11px] font-medium tracking-[0.12em] text-[#444] uppercase">
               FOLLOW ON
             </span>
             <div className="flex gap-4 flex-wrap justify-center">
@@ -70,7 +70,7 @@ export default function ClinicallyManicFooter() {
                 href="https://www.youtube.com/@clinicallymanictv"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-400 transition-colors"
+                className="text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200"
               >
                 <Youtube size={20} />
               </Link>
@@ -78,25 +78,25 @@ export default function ClinicallyManicFooter() {
                 href="https://www.twitch.tv/clinicallymanictv"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-400 transition-colors"
+                className="text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200"
               >
-                <MessageCircle size={20} />
+                <MessageCircle size={18} />
               </Link>
               <Link
                 href="https://x.com/clinicalymanic"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-400 transition-colors"
+                className="text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200"
               >
-                <Twitter size={20} />
+                <Twitter size={18} />
               </Link>
               <Link
                 href="https://www.instagram.com/clinicallymanic/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-400 transition-colors"
+                className="text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200"
               >
-                <Instagram size={20} />
+                <Instagram size={18} />
               </Link>
             </div>
           </div>
@@ -106,8 +106,8 @@ export default function ClinicallyManicFooter() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 mb-12">
           {/* Explore */}
           <div>
-            <h3 className="font-bold text-sm mb-4 tracking-wide">EXPLORE</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#555] mb-5">EXPLORE</h3>
+            <ul className="space-y-3.5 text-[15px] text-[#9A9A9F]">
               <li>
                 <Link href="/playlists">Playlists</Link>
               </li>
@@ -128,8 +128,8 @@ export default function ClinicallyManicFooter() {
 
           {/* Menu */}
           <div>
-            <h3 className="font-bold text-sm mb-4 tracking-wide">MENU</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#555] mb-5">MENU</h3>
+            <ul className="space-y-3.5 text-[15px] text-[#9A9A9F]">
               <li>
                 <Link href="/">Home</Link>
               </li>
@@ -144,8 +144,8 @@ export default function ClinicallyManicFooter() {
 
           {/* More */}
           <div>
-            <h3 className="font-bold text-sm mb-4 tracking-wide">MORE</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#555] mb-5">MORE</h3>
+            <ul className="space-y-3.5 text-[15px] text-[#9A9A9F]">
               <li>
                 <Link href="/exclusive-fashion">Exclusive Fashion</Link>
               </li>
@@ -163,10 +163,10 @@ export default function ClinicallyManicFooter() {
 
           {/* Subscriptions */}
           <div>
-            <h3 className="font-bold text-sm mb-4 tracking-wide">
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#555] mb-5">
               SUBSCRIPTIONS
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3.5 text-[15px] text-[#9A9A9F]">
               <li>
                 <Link href="#">Free Plan</Link>
               </li>
@@ -179,7 +179,7 @@ export default function ClinicallyManicFooter() {
 
         {/* Newsletter */}
         <div className="mb-12">
-          <h3 className="font-bold text-sm mb-4 tracking-wide">
+          <h3 className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#6E6E73] mb-5">
             SIGN UP FOR THE NEWSLETTER
           </h3>
 
@@ -189,12 +189,12 @@ export default function ClinicallyManicFooter() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="ENTER YOUR EMAIL"
-              className="flex-1 bg-transparent border border-white px-4 py-3 text-sm focus:outline-none focus:border-gray-400 w-full"
+              className="flex-1 bg-transparent border border-white/[0.15] px-4 py-3 text-[13px] focus:outline-none focus:border-white/[0.4] w-full text-[#F5F5F7] placeholder:text-[#444]"
             />
             <button
               onClick={handleSubscribe}
               disabled={isPending}
-              className="bg-white text-black px-8 py-3 font-bold text-sm hover:bg-gray-200 transition-colors disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
+              className="bg-white text-black px-8 py-3 font-bold text-[13px] hover:bg-white/85 transition-colors duration-200 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
             >
               {isPending ? 'SUBSCRIBING...' : 'GET NOTIFIED'}
             </button>
@@ -215,13 +215,13 @@ export default function ClinicallyManicFooter() {
         </div>
 
         {/* Bottom Links */}
-        <div className="flex flex-wrap gap-6 mb-8 text-xs text-gray-400">
-          <Link href="/terms" className="hover:text-white transition-colors">TERMS & CONDITIONS</Link>
-          <Link href="/privacy" className="hover:text-white transition-colors">PRIVACY POLICY</Link>
+        <div className="flex flex-wrap gap-6 mb-8 text-[11px] text-[#6E6E73]">
+          <Link href="/terms" className="hover:text-[#F5F5F7] transition-colors duration-200">TERMS &amp; CONDITIONS</Link>
+          <Link href="/privacy" className="hover:text-[#F5F5F7] transition-colors duration-200">PRIVACY POLICY</Link>
         </div>
 
         {/* Copyright */}
-        <div className="text-xs text-gray-500">
+        <div className="text-[11px] text-[#444]">
           © CLINICALLY MANIC, LLC — ALL RIGHTS RESERVED.
         </div>
       </div>

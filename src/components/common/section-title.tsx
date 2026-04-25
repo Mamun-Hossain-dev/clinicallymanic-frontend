@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Flame } from 'lucide-react'
 import type React from 'react'
 
 interface SectionTitleProps {
@@ -9,35 +8,31 @@ interface SectionTitleProps {
   icon?: 'Flame'
   link?: string
   linkText?: string
+  eyebrow?: string
 }
 
 export function SectionTitle({
   children,
-  icon,
   link,
   linkText = 'View All',
+  eyebrow = 'CURATED FOR YOU',
 }: SectionTitleProps) {
-  const icons: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
-    Flame,
-  }
-
-  const Icon = icon && icon in icons ? icons[icon] : null
-
   return (
     <div className="mb-4 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        {Icon && <Icon className="h-6 w-6 text-destructive" />}
-        <h2 className="text-2xl font-bold text-foreground">{children}</h2>
+      <div className="flex flex-col">
+        <span className="block text-[11px] font-medium uppercase tracking-[0.15em] text-[#6E6E73] mb-1">
+          {eyebrow}
+        </span>
+        <h2 className="text-[22px] font-bold text-[#F5F5F7] tracking-[-0.02em]">{children}</h2>
       </div>
 
       {link && (
         <Link
           href={link}
-          className="text-sm font-medium text-primary hover:underline"
+          className="group flex items-center gap-1 text-[13px] text-[#6E6E73] hover:text-[#F5F5F7] transition-colors duration-200 ease-apple"
         >
-          <button className="hidden rounded-lg bg-zinc-800 px-6 py-2 transition-colors hover:bg-zinc-700 sm:block">
-            {linkText}
-          </button>
+          {linkText}
+          <span className="transform transition-transform duration-200 ease-apple group-hover:translate-x-1">→</span>
         </Link>
       )}
     </div>
